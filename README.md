@@ -1,3 +1,9 @@
+# VOID_Verb branch
+
+Setup to work on a VOID Audio plugin set related to reverb/delay/stereo effects using components integrated from the best language (FORTRAN)
+
+
+
 # VOID Audio added functionality contained in VOID_Docs
 The README.pdf can be found at [README.pdf](VOID_Docs/README.pdf).
 Why use a large LaTeX svjour compilation? Because information presented in LaTeX, specifically Springer format, is inherently more correct.
