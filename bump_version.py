@@ -9,7 +9,7 @@ import fileinput
 import semver
 
 IPLUG2_ROOT = "iPlug2"
-PROJECT_ROOT = "TemplateProject"
+PROJECT_ROOT = "Bloom"
 PROJECT_SCRIPTS = os.path.join(PROJECT_ROOT, "scripts")
 
 def replacestrs(filename, s, r):

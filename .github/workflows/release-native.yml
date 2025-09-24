@@ -12,7 +12,7 @@ on:
   workflow_dispatch
 
 env:
-  PROJECT_NAME: TemplateProject
+  PROJECT_NAME: Bloom
   URL: http://localhost:8000/  # local testing URL
 
 jobs:
@@ -54,7 +54,7 @@ jobs:
           cd ${{env.PROJECT_NAME}}/scripts
           ./makedist-web.sh off ${{env.URL}}
 
-  PROJECT_NAME: TemplateProject
+  PROJECT_NAME: Bloom
 
 jobs:
   create_release:

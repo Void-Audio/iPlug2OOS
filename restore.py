@@ -5,7 +5,7 @@ import shutil
 import re
 
 BACKUP_DIR = "agent_backups"
-RESTORE_ROOT = "TemplateProject"
+RESTORE_ROOT = "Bloom"
 
 if not os.path.isdir(BACKUP_DIR):
     print(f"Backup directory '{BACKUP_DIR}' does not exist.")
@@ -18,7 +18,7 @@ for backup_file in sorted(os.listdir(BACKUP_DIR)):
         continue
 
     # Strip timestamp / .bak suffix
-    # Example: TemplateProject.cpp.20250911_042530.bak -> TemplateProject.cpp
+    # Example: Bloom.cpp.20250911_042530.bak -> Bloom.cpp
     original_filename_match = re.match(r"^(.*?)(?:\.\d{8}_\d{6}\.bak)?$", backup_file)
     if not original_filename_match:
         print(f"Skipping {backup_file}: unable to determine original filename")

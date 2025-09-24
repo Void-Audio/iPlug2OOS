@@ -7,7 +7,7 @@
             "command": "xcodebuild",
             "args": [
                 "-project",
-                "${workspaceFolder}/TemplateProject/projects/TemplateProject-macOS.xcodeproj",
+                "${workspaceFolder}/Bloom/projects/Bloom-macOS.xcodeproj",
                 "-target",
                 "VST3",
                 "-configuration",
@@ -22,7 +22,7 @@
             "command": "xcodebuild",
             "args": [
                 "-project",
-                "${workspaceFolder}/TemplateProject/projects/TemplateProject-macOS.xcodeproj",
+                "${workspaceFolder}/Bloom/projects/Bloom-macOS.xcodeproj",
                 "-target",
                 "AUv3",
                 "-configuration",
@@ -34,7 +34,7 @@
         {
             "label": "build WAM",
             "type": "shell",
-            "command": "${workspaceFolder}/TemplateProject/scripts/makedist-web.sh",
+            "command": "${workspaceFolder}/Bloom/scripts/makedist-web.sh",
             "args": ["container"],
             "group": {
                 "kind": "build"
@@ -46,7 +46,7 @@
         //     "command": "xcodebuild",
         //     "args": [
         //         "-project",
-        //         "${workspaceFolder}/TemplateProject/projects/TemplateProject-macOS.xcodeproj",
+        //         "${workspaceFolder}/Bloom/projects/Bloom-macOS.xcodeproj",
         //         "-target",
         //         "AAX",
         //         "-configuration",
