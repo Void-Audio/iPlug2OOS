@@ -10,11 +10,7 @@ import semver
 
 IPLUG2_ROOT = "iPlug2"
 PROJECT_ROOT = "TemplateProject"
-<<<<<<< HEAD
-PROJECT_SCRIPTS = PROJECT_ROOT + "/scripts"
-=======
 PROJECT_SCRIPTS = os.path.join(PROJECT_ROOT, "scripts")
->>>>>>> cloud-dev-trash-branch
 
 def replacestrs(filename, s, r):
     files = glob.glob(filename)
