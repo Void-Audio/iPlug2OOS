@@ -59,7 +59,10 @@ void TemplateProject::ProcessBlock(sample** inputs, sample** outputs, int nFrame
   
   for (int s = 0; s < nFrames; s++) {
     for (int c = 0; c < nChans; c++) {
-      outputs[c][s] = inputs[c][s] * gain;
+      float inSample = static_cast<float>(inputs[c][s] * gain);
+      float outSample = 0.f;
+      vprocess(&inSample, &outSample);   // pass pointers
+      outputs[c][s] = static_cast<sample>(outSample);
     }
   }
 }
