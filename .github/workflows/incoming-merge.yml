@@ -1,0 +1,33 @@
+name: Merge Incoming into FKernels
+
+on:
+  push:
+    branches:
+      - incoming
+
+jobs:
+  merge_into_FKernels:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: incoming
+          persist-credentials: true
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch all branches
+        run: git fetch origin FKernels
+
+      - name: Merge incoming into FKernels
+        run: |
+          git checkout FKernels
+          git merge --no-ff incoming -m "Automatic merge from incoming"
+      
+      - name: Push changes
+        run: git push origin FKernels
