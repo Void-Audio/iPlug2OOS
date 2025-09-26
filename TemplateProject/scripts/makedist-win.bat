@@ -1,4 +1,5 @@
 @echo off
+setlocal 
 
 REM - batch file to build Visual Studio project and zip the resulting binaries (or make installer)
 REM - updating version numbers requires python and python path added to %PATH% env variable 
@@ -58,7 +59,7 @@ goto END
 
 :64-Bit
 echo 64-Bit Host O/S detected
-call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_x64
+call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_x64
 goto END
 :END
 )
@@ -83,6 +84,12 @@ REM echo Building 64 bit binaries...
 REM add projects with /t to build VST2 and AAX
 msbuild TemplateProject.sln /t:TemplateProject-app;TemplateProject-vst3;TemplateProject-clap /p:configuration=release /p:platform=x64 /nologo /verbosity:minimal /fileLogger /m /flp:logfile=build-win.log;errorsonly;append
 
+REM MSBuild fails so added this to confirm
+IF %ERRORLEVEL% NEQ 0 (
+    echo MSBuild failed with exit code %ERRORLEVEL%
+    type build-win.log
+    exit /b %ERRORLEVEL%
+)
 REM --echo Copying AAX Presets
 
 REM --echo ------------------------------------------------------------------
