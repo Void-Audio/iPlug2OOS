@@ -60,6 +60,7 @@ goto END
 :64-Bit
 echo 64-Bit Host O/S detected
 call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x86_x64
+
 goto END
 :END
 )
