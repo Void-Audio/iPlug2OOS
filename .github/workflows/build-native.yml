@@ -1,9 +1,10 @@
 name: Build Windows VST3
 
 on:
-  push:
-    branches:
-      - FKernels
+  workflow_dispatch
+  # push:
+  #   branches:
+  #     - FKernels
 
 env:
   PROJECT_NAME: TemplateProject
