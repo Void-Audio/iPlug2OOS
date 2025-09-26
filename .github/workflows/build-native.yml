@@ -1,7 +1,7 @@
 name: Build Windows VST3
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
   push:
     branches:
       - FKernels
