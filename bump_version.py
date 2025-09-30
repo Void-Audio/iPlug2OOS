@@ -9,7 +9,7 @@ import fileinput
 import semver
 
 IPLUG2_ROOT = "iPlug2"
-PROJECT_ROOT = "TemplateProject"
+PROJECT_ROOT = "Rend"
 <<<<<<< HEAD
 PROJECT_SCRIPTS = PROJECT_ROOT + "/scripts"
 =======

@@ -4,12 +4,12 @@
 # Set args for init.sh -> setup.sh 
 # undo_setup.sh to reset back to initial state
 
-PROJECT_NAME = Rend_TEST
+PROJECT_NAME=Rend
 
-MANUFACTURER_NAME = VOID
+MANUFACTURER_NAME=VOID
 
 # TODO: add more params to control build customization
 
-# REALTIME_DISPLAY = False
+# REALTIME_DISPLAY=False
 
 

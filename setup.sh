@@ -1,17 +1,22 @@
 #!/bin/bash
 
-# setup.sh PROJECT_NAME MANUFACTURER_NAME
-# Fully initializes iPlug2OOS, duplicates template, and commits.
 
 set -e  
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 PROJECT_NAME MANUFACTURER_NAME"
+CONFIG_FILE="config.txt"
+
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "Error: $CONFIG_FILE not found!"
     exit 1
 fi
 
-PROJECT_NAME=$1
-MANUFACTURER_NAME=$2
+source "$CONFIG_FILE"
+
+if [ -z "$PROJECT_NAME" ] || [ -z "$MANUFACTURER_NAME" ]; then
+    echo "Error: PROJECT_NAME or MANUFACTURER_NAME missing in $CONFIG_FILE"
+    exit 1
+fi
+
 TEMPLATE_NAME="TemplateProject"
 
 if [ ! -d "$TEMPLATE_NAME" ]; then
