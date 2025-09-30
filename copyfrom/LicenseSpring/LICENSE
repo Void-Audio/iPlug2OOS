@@ -1,0 +1,45 @@
+LicenseSpring Compiled SDK License Agreement (LCSLA)
+
+Preamble:
+This LicenseSpring Compiled SDK License Agreement (LCSLA) governs the use, distribution, and modification of the compiled binaries for the LicenseSpring SDKs. These SDKs, including those for C++, Java, and .NET, are designed to facilitate integration with LicenseSpring’s license management service. By accessing or using the SDK binaries, you agree to the terms and conditions set forth in this agreement.
+
+1. Permissions:
+
+	* You are permitted to use the compiled SDK binaries provided by LicenseSpring solely for the purpose of integrating your products with the LicenseSpring service.
+	* You may create derivative works that rely on or incorporate the SDK binaries, provided such derivative works are used exclusively as part of the LicenseSpring service.
+
+2. Distribution:
+
+	* You may distribute software that integrates or incorporates the SDK binaries, provided the software interacts directly with the LicenseSpring service.
+	* Distribution of the SDK binaries, in their original or modified form, is only allowed in conjunction with your own software that integrates with LicenseSpring.
+	* Distributed versions, including derivative works, may not be:
+		* Provided as part of a hosted or cloud-based service that allows others to access the SDK’s functionality without interacting directly with the LicenseSpring service.
+		* Integrated into other services that compete with or do not use the LicenseSpring service.
+
+3. Usage Restrictions:
+
+	* The SDK binaries, in their original or modified form, may only be used as part of the LicenseSpring service.
+	* You are prohibited from using the SDK binaries independently or as part of any service that does not interact with the LicenseSpring service.
+
+4. Prohibited Actions:
+
+	* You may not reverse engineer, decompile, or disassemble the SDK binaries, except as expressly permitted by applicable law.
+	* You must not modify, remove, or obscure any license notices, copyright notices, or other proprietary notices from the SDK binaries without permission from Cense Data Inc.
+
+5. Contributions and Feedback:
+
+	* By submitting suggestions, improvement ideas, feature requests, or any other feedback ("Contributions"), you grant LicenseSpring a perpetual, worldwide, royalty-free, irrevocable license to use, reproduce, modify, distribute, and incorporate the Contributions into the SDK or any other products or services of LicenseSpring.
+	* LicenseSpring retains sole ownership and rights to the SDK binaries and any incorporated Contributions.
+
+6. Termination:
+	* Any violation of these terms will result in the automatic termination of your rights under this license.
+	* Upon termination, you must cease all use and distribution of the SDK binaries and destroy all copies in your possession.
+
+7. Disclaimer of Warranty and Liability:
+
+	* Permission to use, copy, and/or distribute the SDK binaries for any purpose with or without fee is hereby granted under the conditions outlined above.
+
+	THE SOFTWARE IS PROVIDED "AS IS" AND LICENSESPRING DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. LICENSESPRING SHALL NOT BE LIABLE FOR ANY DAMAGES ARISING OUT OF OR RELATED TO THE USE OR PERFORMANCE OF THE SOFTWARE.
+
+Copyright 2018-2025 Cense Data Inc DBA LicenseSpring
+Contact: support@licensespring.com

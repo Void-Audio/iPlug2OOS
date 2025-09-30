@@ -1,0 +1,47 @@
+LicenseSpring C++ SDK v7.41.0
+Copyright © 2018-2025 Cense Data Inc. All rights reserved.
+
+Since v7.34.0 the LicenseSpring C++ SDK is licensed under the LicenseSpring Compiled SDK License Agreement (LCSLA).
+See ./LICENSE for more information.
+
+Please see:
+./documentation/Documentation.html
+./samples
+https://docs.licensespring.com/docs/c
+https://licensespring.com
+https://licensespring.com/terms-of-service/
+https://licensespring.com/data-processing/
+https://licensespring.com/service-level-agreement/
+
+
+This project uses cURL v8.12.1, for more information please refer to:
+./include/curl
+https://curl.se
+https://curl.se/docs/copyright.html
+https://github.com/curl/curl
+
+
+This project uses OpenSSL v3.4.1, for more information please refer to:
+./include/openssl
+https://www.openssl.org
+https://www.openssl.org/source/license.html
+https://www.openssl.org/source/license-openssl-ssleay.txt
+https://www.openssl.org/docs/faq.inc
+https://github.com/openssl/openssl
+
+
+This project uses Yubico libykpiv v2.7.1, for more information please refer to:
+https://developers.yubico.com/yubico-piv-tool/
+./include/ykpiv/COPYING
+
+
+Certificates
+Please see:
+./certificates
+https://curl.se/docs/sslcerts.html
+https://curl.se/docs/caextract.html
+SDK contains subset of CA certificates embedded, and by default configured to rely on system certificates.
+Nevertheless you may also include ca bundle file along with your software.
+Place .crt file or certificates folder next to your binary file.
+For Windows .cert file name should be curl-ca-bundle.crt (curl prefered) or ca-certificates.crt
+For Linux and macOS ca-certificates.crt

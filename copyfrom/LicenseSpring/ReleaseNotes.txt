@@ -1,0 +1,626 @@
+### August 01, 2025, v7.41.0
+- Fixed `include` directories not containing configured headers on macOS and Linux targets.
+- Added support for Floating server V2 to `LicenseSpring::FloatingClient` and `LicenseSpring::License`.
+- Made `BaseManager::reconfigure()` virtual to support overriding in `FloatingClient` class.
+- Added a private `FloatingClient::m_isFloatingServerV2` member.
+- Added `FloatingClient::getAllLicenses` method that fetches the `LicenseID` of available licenses from the Floating server tied to the configured product code.
+- Added `FloatingClient::authenticateUser` method that allows a user to log in and use floating licenses.
+- Added `ExtendedOptions::setCertificateChain`, `ExtendedOptions::setCertificateChainFromFile` and `ExtendedOptions::getCertificateChain` methods to set certificate chains user for verifying Floating Server V2 responses.
+- Added `Configuration::getCertificateChain` getter.
+
+### June 16, 2025, v7.40.0
+- Added new Android builds targeting `armeabi-v7a`, `x86` and `x86_64` ABIs.
+- Stripped unused debug symbols from shared libraries built with the Android NDK.
+- Added `LicenseHandler::clearErrorInfo` method for manually clearing `LicenseHandler` error codes.
+- Added `clearErrorInfo` function to the `LicenseHandler` C interface.
+- Added `License::activationDate` and `License::activationDateUtc` license activation time getters.
+- Added `LicenseHandler::getActivationDate` and `LicenseHandler:getActivationDateUtc` license activation time getters.
+- Added `LicenseSpring::Company` class, used for getting the LicenseSpring company ID from the LicenseSpring backend.
+- Added `Company` struct in the C interface with corresponding Create and Free functions.
+- Added `License::company` and `LicenseHandler::getCompany` getters.
+- Added `getCompany` function in C interface `LicenseHandler`.
+
+### June 5, 2025, v7.39.0
+- Fixed metadata JSON parsing in Android sample.
+- Fixed a bug where calling `License::isLicenseBelongsToThisDevice` and `License::checkLicenseBelongsToThisDevice` would overwrite the set DeviceIDAlgorithm with one that doesn't belong to current device.
+- Updated `License::isLicenseBelongsToThisDevice` and `License::checkLicenseBelongsToThisDevice` docstrings.
+- Removed LDAP dependency for libcurl on static macOS targets.
+- Fixed CppSample and CSample XCode projects crashing when linking to dynamic libraries.
+- Added a BundleManager class which handles online and offline bundle activation and deactivation, and bundle checks.
+- Added two new exceptions, `ProductNotBundleException` and `BundleMismatchException`.
+- Added two new error codes, `eProductNotBundle` and `eBundleMismatch`.
+- Refactored CppSample into two different subsamples, one with license activation, and one with bundle activation.
+- Fixed a bug where signature verification fails when using custom white-labeled License API domains.
+
+### May 14, 2025, v7.38.0
+- Fixed DESTDIR path for `win32` target in the Qt sample.
+- Fixed an OpenSSL thread-safety issue when computing HMAC-SHA256.
+- Added SDK builds for Android compiled with NDK 26.1.10909125 and 27.2.12479018, targeting the `arm64-v8a` ABI and minimum API level 24.
+- Added an Android NDK sample to `samples/AndroidNDKSample`.
+
+### April 18, 2025, v7.37.0
+- Changed rpath for Linux libraries to `$ORIGIN`, which fixes `libLicenseSpring` not finding its dependencies provided by LicenseSpring.
+- Added YubiKey support for licenses that require hardware key dongles:
+    - On Linux and macOS targets, new libraries are placed in `bin/shared_HardwareKey` and `bin/static_HardwareKey`. Libraries in `bin/shared` and `bin/static` work as expected without linking to `libykpiv`.
+    - Linux versions targeting `arm` and `ppc64le` don't link to `ykpiv`. 
+    - On MSVC targets, new libraries are placed in `bin/dynamic_HardwareKey`. We don't support static linking to `libykpiv`.
+    - Added a new class `LicenseSpring::HardwareKeyOptions` used for fetching YubiKey serial numbers, and setting the YubiKey PIN and serial.
+    - Added a `LicenseSpring::HardwareKeyOptions` setter and getter to `LicenseSpring::ExtendedOptions`
+    - Added the corresponding C inteface for `LicenseSpring::HardwareKeyOptions`
+    - Added a new exception `LicenseSpring::HardwareKeyException` and corresponding LicenseSpring error codes.
+- Added an optional `password` parameter to `License::borrow` and `LicenseHandler::borrow` that allows borrowing user-based licenses.
+- Added `borrowFloatingLicenseWithPassword` and `borrowFloatingLicenseTillWithPassword` functions to the `LicenseHandler` C interface.
+
+### April 8, 2025, v7.36.0
+- Update OpenSSL to version 3.4.1
+- Update curl to version 8.12.1
+- The SDK now throws `LicenseSpring::OAuthException` when sending an unknown `client_id` OAuth parameter.
+- The SDK now throws `LicenseSpring::OAuthException` when sending a malformed OAuth token.
+- Added `eInvalidClient` error code to `LSErrorCode`.
+- Added `eOAuthTokenMalformed` error code to `LSErrorCode`.
+- Prolonged lifetime of the internal Logger singleton and the internal OpenSSL crypto provider by marking their constructor invocations with \[\[gnu::constructor\]\]. This change is relevant only for gcc and clang compilers.
+- Added overload for `BaseManager::getProductDetails` that retreives product-level custom fields and filters products by environment string. 
+- Added overload for `LicenseHandler::getProductDetails` that retreives product-level custom fields and filters products by environment string.
+- Added `getProductDetailsWithCustomFieldsAndEnv` function in C-interface for `LicenseHandler`.
+- Added `ProductDetails::customFields` getter.
+- Added `customFields` getter in C-interface for `ProductFields`. See `CSample` for usage instructions.
+- Updated `CppSample` and `CSample`.
+- Changed code formatting rules in header files.
+
+### February 20, 2025, v7.35.0
+- Added OAuth client credentials authentication to the License API.
+- Added a factory function `Configuration::CreateOAuth` for OAuth authentication.
+- Added a factory function `CreateLSConfigurationOAuth` to the C interface.
+- Added `Configuration::isOAuth`, `Configuration::getClientId` and `Configuration::getClientSecret`.
+- Added the same getters to the C interface.
+- Updated samples with OAuth, see `AppConfig.cpp` and `AppConfig.c`
+- Added `setCryptoProviderKey` and `setCryptoProviderSalt` setters to the C interface for `ExtendedOptions`. Using the key setter is required for OAuth authentication.
+
+### February 14, 2025, v7.34.0
+- Added a new licensing agreement for the SDK.
+- Added overloads for online and offline activation functions, which enables sending device variables on licnese activation.
+- Added `License::isNegativeConsumptionAllowed`, `LicenseHandler::isLicenseNegativeConsumptionAllowed` and corresponding C interface getters.
+- Fixed memory leak in Windows hardware ID algorithm.
+- Added `License::orderStoreId` and `LicenseHandler::getOrderStoreId` and corresponding C interface getters for the order store ID.
+- Fixed a crash when calling `License::registerFloatingFeature` and `License::releaseFloatingFeature` with the offline floating server. 
+- Changed certificate bundle SSL verification to check multiple bundles on the filesystem.
+- Improved logging on failed SSL verification.
+
+### September 03, 2024, v7.33.0
+ - Fixed license object not updating after license relink in `CppSample`.
+ - Fixed `License::validityWithGracePeriod` and `License::validityWithGracePeriodUtc` adding extra hour in case of DST.
+ - Added more verbose error messages for license file writing.
+ - Added `ExtendedOptions::enableLicenseCorruptionCheck`, `ExtendedOptions::isLicenseCorruptionCheckEnabled` and `Configuration::isLicenseCorruptionCheckEnabled` and associated C interface functions, see SDK documentation for more details.
+ - Added `BaseManager::isLicenseFileCorrupted` and  `LicenseHandler` and C interface functions.
+ - Fixed hardware ID validation on cloud provider algorithms.
+ - Added license signature validation to `License::localCheck`.
+ - Added curl connection timeout setter and getter to `ExtendedOptions`, `Configuration`, and corresponding C interfaces.
+ - Added new `UserLicense` and `UserLicensesData` classes to encapsulate information about multiple licenses of the same product assigned to a single user.
+ - Added `LicenseManager::getUserLicenses` and `LicenseHandler::getUserLicenses` to retrieve `UserLicensesData` objects from the license API.
+ - Added a new `LicenseID::fromUser` constructor that takes a server-side license ID parameter from `UserLicensesData`.
+ - Added `License::serverId` and `LicenseHandler::getLicenseServerId`.
+ - Updated the user-based C++ sample.
+ - Changed return values of `LicenseHandler::licenseFileName` and `LicenseHandler::licenseFilePath` to `const std::wstring&` for C interface compatibility.
+ - Deprecated the CentOS 7 SDK build.
+
+### May 24, 2024, v7.32.0
+ - Fixed generating hardware ID on AWS instances.
+ - Improved memory handling of License API wrapper.
+ - Added air-gapped license pre-provisioning through online activation.
+ - Added `getDataLocation`, `setDataLocation`, `getLicenseFileName`, `setLicenseFileName` functions to the C `LicenseHandler` interface.
+ - Fixed offline license update throwing `ProductMismatchException`.
+ - Implemented `ProxySettings::fetchProxySettings` that tries to automatically fetch current user proxy settings.
+
+### April 19, 2024, v7.31.0
+ - Fixed certificate lookup on macOS.
+ - Fixed documentation for `License::feature`.
+ - Added `License::trialPeriod` member function, which returns the trial duration of the current license.
+ - Fixed `DeviceIDAlgorithm::WinCSProductId` failing on Windows startup.
+ - Added more robust check of tampered VM detection DLL.
+ - Froze the MSVC compiler version to 1936 (runtime library version 14.36.32532) in the v143 toolset Windows build.
+
+### February 24, 2024, v7.30.0
+ - Added new hardware ID algorithm `DeviceIDAlgorithm::AutoIdWinCloud` that tries to compute `CloudPlatformsId` with `WinCSProductId` as the fallback.
+ - Fixed `BaseManager::reconfigure` crashing the SDK.
+
+### February 09, 2024, v7.29.0
+ - Added `License::transferLimit` member function, which returns the limit of license transfers between devices.
+ - Added `License::isDeviceTransferAllowed` and `License::isDeviceTransferLimited` member functions.
+ - `License::syncFeatureConsumption` now correctly throws the `NotEnoughConsumptionException` exception.
+ - Added optional `includeExpiredFeatures` parameter to `License::check`.
+ - Updated CppSample and CSample to print device transfer info.
+ - Updated CppSample and CSample to get expired features.
+
+### January 08, 2024, v7.28.1
+- Fixed handling older non-floating features.
+- Fixed getting product details in the C SDK sample.
+
+### December 12, 2023, v7.28.0
+- Added handler for `license_user_activated_max_times` error code, the SDK throws `LicenseNoAvailableActivationsException` in case of this error on license activation.
+- Fixed floating in use count parsing for offline floating licenses.
+- Added floating feature registration and releasing.
+- Added floating feature watchdog.
+- Added optional flag `includeLatestVersion` to `LicenseManager::getProductDetails`.
+- Implemented `ProductDetails::latestVersion()` getter. 
+- Updated CppSample and CSample to handle floating features, floating feature watchdog and latest version.
+
+### October 11, 2023, v7.27.1
+- curl updated to v8.4.0
+
+### August 31, 2023, v7.27.0
+- Fixed issues in .xcodeproj files for C and Cpp SDK samples (#32927766).
+- Improved MinGW SDK build, added VM detection dll (#29014044).
+- Updated certificates bundle file (#32950331).
+- Updated static libraries for Windows MSVC (#32943537).
+
+### August 25, 2023, v7.26.1
+- Fixed false positive malware detection in Virtual Machine detection module (#32900790).
+- Fixed false positives and improved detection of Hyper-V (#32911302).
+
+### August 21, 2023, v7.26.0
+- Added CMake build for CppSample on Windows(MSVC)(#31855078).
+- Added logging to air-gap activation.
+- Implemented grace period feature (#32583538).
+- Added `isGracePeriodStarted`, `gracePeriodEndDateTime`, `gracePeriodEndDateTimeUTC`, `gracePeriodHoursRemaining` methods to `License` class (#32583538).
+- Added `setGracePeriod`, `getGracePeriod` methods to `ExtendedOptions` class (#32583538).
+- Added `RequestDateInvalidException` and `eRequestDateHeaderInvalid` error code (#32866103).
+- Renamed methods related to subscription grace period to `License::isSubscriptionGracePeriodStarted`, `License::subscriptionGracePeriod` (#32583538).
+- Fixed handling of absolute paths on MacOS and Linux (#32852804).
+- Fixed issues with false positive VM detection, improved logging for VM detection module (#26934559).
+- Fixed incorrect metadata deserialization issue (#32865596).
+- OpenSSL updated to v3.1.2 (#32860854).
+- curl updated to v8.1.2 (#32860806).
+
+### July 14, 2023, v7.25.0
+- SSL certificate verification now enabled by default (#32418977).
+- Moved verification of confirmation code to the `activateAirGapLicense` method (#32395921).
+- Added `AirGapActivationException`, it occurs when confirmation code verification fails (#32395921).
+- Added `LicenseHandler::isLicenseAirGapped` and `License::isAirGapped` methods (#32395921).
+- Added `LicenseHandler::getLicensePolicyId` and `License::policyId` methods (#32559915).
+- Added improvement: loading license if exist when changing license data location, see `setDataLocation` (#32425880).
+- Added signature verification when handling license borrowing response (#32303501).
+- Added missing options to Configuration and ExtendedOptions structs for C-interface (#32540969).
+- Added to C-interface `LSExtendedOptions` `setAlternateKey` function that accepts C-string (#32303488).
+- Added subset of embedded certificates, improved logic for SSL certificate verification and lookup (#32418977).
+- Added support for Schannel TLS backend for curl on Windows (#32471213).
+- Added support for Secure Transport TLS backend for curl on macOS (#32471211).
+- Implemented feature of loading ca certificates from OS and ca bundle file (#32418977).
+- Implemented caching of product details, added `License::productDetails` method (#31941731).
+- Implemented air-gap license deactivation, added `License::deactivateAirGap` and `License::getAirGapDeactivationCode` methods (#32511721).
+- Updated AirGapQtSample to handle air-gap deactivation (#32511721).
+- Fixed air-gap trial license detection issue (#32395921).
+- Fixed confirmation code verification issue for air-gap licenses (#32395921).
+- Fixed signature verification issue when using older versions of libcurl (#32316033).
+- Fixed signature verification issue for older API (#32356170).
+- Fixed prepending slash path issue when setting license data location (#32425995).
+- Fixed issues with Unicode symbols in license file path for macOS and Linux (#32428060).
+- Improved exception handling (#32474725).
+- Improved alternative device id creation on Linux (#29017945).
+- Improved air-gap activation security (#32559915).
+
+### June 12, 2023, v7.24.0
+- Added metadata field for `ProductDetails`, `Customer`, `License` and `LicenseFeature` classes.
+- Added logging and handling exceptions to license watchdog.
+- Added WatchdogException, it occurs in case creating watchdog thread failed.
+- Added `ExtendedOptions::setAlternateKey` method that accepts string.
+- Added minor improvements and logging for offline activation.
+- OpenSSL updated to v1.1.1.21(u)
+- curl updated to v8.1.2
+- Fixed issue of creating a log file when logging is disabled.
+- Security patch, that address vulnerability of bypassing license signature verification.
+
+### May 17, 2023, v7.23.0
+- Updated SDK demo samples. Implemented better handling of floating licenses in WinSample, CSample and CppSample.
+- Implemented unlimited consumption feature. Added `License.isUnlimitedConsumptionAllowed` , `LicenseFeature.isUnlimitedConsumptionAllowed` and `LicenseHandler.isLicenseUnlimitedConsumptionAllowed` methods.
+- Fixed issue of saving local license after revoking floating license.
+- Fixed issues with error handling for offline and air-gap activation.
+- Fixed OS version detection issue for Windows 11.
+
+### April 27, 2023, v7.22.0
+- Improved security check for offline license activation and refresh, implemented offline signature verification.
+- Improved error handling for offline license activation and refresh, the SDK will throw more specific exceptions in case of errors. 
+- OpenSSL updated to v1.1.1.20(t)
+- curl updated to v8.0.1
+- Updated JSON for Modern C++ to v3.11.2
+- Fixed issue of json serialization when license data contains invalid UTF-8 bytes.
+
+### April 04, 2023, v7.21.0
+- Included cURL and OpenSSL header and lib files.
+- Added README file with cURL and OpenSSL version information.
+- Added SDK version to log file.
+- Added new device id algorithms `DeviceIDAlgorithm::Gen2` and `DeviceIDAlgorithm::AutoIdGen2`.
+- Improved security for `License::updateOffline` method.
+- Fixed several issues with offline activation.
+- Fixed `LicenseManager::relinkLicense` method.
+- Fixed issue of encrypting long strings.
+
+### February 08, 2023, v7.20.0
+- Added `ApiKeyException` and corresponding error codes `eInvalidApiKey`, `eReadOnlyApiKey`, `eRevokedApiKey` and `eApiKeyProductNotAllowed`.
+- Added `FloatingTimeoutExpiredException`.
+- Implemented `License::maxBorrowTime` method.
+- Implemented grace period feature for Subscription licenses. See `License::gracePeriod` and `License::validityWithGracePeriod`.
+- Implemented `License::isGracePeriodStarted` method.
+- Fixed issue of auto-revoking floating license at app exit when using static `LicenseHandler` object.
+- Fixed error handling for successful responses during license activation and online check.
+- Fixed issue of missing mac SDK version information.
+- Improved floating expiration logic and local license check.
+- Removed `License::signature`, implemented faster loading and saving of local license.
+
+### January 09, 2023, v7.19.0
+- Implement support for duration fields in license policy file for Air-gap activation.
+- Implemented a couple of alternative device id algorithms for Windows. See `DeviceIDAlgorithm::WinCSProductId` and `WinCryptographyId`.
+- Implemented `relinkLicense` method.
+- Added `License::stopLicenseWatchdog` method, same added for `LicenseHandler` and C-interface.
+- Fixed issue with incorrect rpath for mac universal dynamic libs.
+- Improved error handling in case license transfer is limited or not allowed.
+
+### October 24, 2022, v7.18.0
+- Improved security, implemented license signature v2 verification.
+- Implemented `setupLicenseWatchdog` function for C-interface. 
+- Implemented SSO activation using auth code.
+- For Windows builds VM detection code is moved to satellite DLL.
+- Fixed issue of incorrect return value for `LicenseHandler::getMaintenanceDaysRemaining` method.
+- Fixed several problems with Linux machine id in some of the distributions and Docker containers.
+- Updated SSOSample and CSample.
+- Updated documentation.
+
+### August 15, 2022, v7.17.0
+- `FloatingClient::borrow` renamed to `FloatingClient::borrowLicense`.
+- Implemented getting instance id for cloud platforms: AWS, Azure, and GCP. Added `DeviceIDAlgorithm::CloudPlatformsId` and `DeviceIDAlgorithm::AutoId`.
+- Fixed issue of virtual methods in `LicenseFeature` class.
+- Implemented error handling for 401, 403, 407 http errors. See `AuthorizationException` and `eAuthorizationError` error code.
+- Added device variables to offline deactivation file.
+
+### July 22, 2022, v7.16.0
+- Implemented methods `getAirGapActivationCode`, `verifyConfirmationCode` and `activateAirGapLicense` in `LicenseManager` and `LicenseHandler` classes for activation of air gap licenses.
+- Added `DeviceIDAlgorithm` enum and `ExtendedOptions::setDeviceIdAlgorithm` function. `DeviceIDAlgorithm::Gen1` option can be useful for air gap activation.
+- Added `Configuration::isSSLCheckEnabled` and `ExtendedOptions::enableSSLCheck`, see SDK documentation for more details.
+- Added `Source: sdk` header.
+- Added `FloatingClient::borrow` method.
+- Added AirGapQtSample project.
+- Improved SSOSample, added support for authorization with default browser.
+- Implemented sending optional param `sdk_lang`.
+- Implemented `License::isBorrowed` and `LicenseHandler::isLicenseBorrowed` methods.
+- Fixed virtual destructors and header files for CryptoProvider and LicenseStorage.
+- Fixed setting license file path and name through the LicenseHandler.
+- Fixed instantiating locale issue for older libcxx versions.
+- Fixed several issues and improved SDK <-> FloatingServer integration.
+- Updated SDK documentation.
+
+### May 31, 2022, v7.15.0
+- Improved integration with Floating server.
+- Updated SDK documentation.
+- Added `LicenseID::setPassword` method.
+- Added methods for consumption licenses: `License::consumptionPeriod`, License::isResetConsumptionEnabled`, `LicenseHandler::isResetLicenseConsumptionEnabled`, `LicenseHandler::getLicenseConsumptionPeriod`.
+- Added methods for consumption license features: `LicenseFeature::maxOverages`, `LicenseFeature::isOveragesAllowed`, `LicenseFeature::consumptionPeriod`, `LicenseFeature::isResetConsumptionEnabled`.
+- Fixed typo in `Configuration::isLoggingEnabled` method.
+- Fixed detection of OS name for Windows 11.
+
+### May 12, 2022, v7.14.0
+- Implemented license borrowing feature. See `License::borrow`, `LicenseHandler::borrowFloatingLicense`.
+- Added `License::floatingEndDateTime`, now floating license expires when floating period ends.
+- Added `LicenseHandler::registerFloatingLicense` method, it is equivalent to online license check for cloud floating license.
+- Added `BorrowLicenseException` and `eBorrowLicenseError`, `eBorrowingNotAllowed` error codes.
+- Added `Configuration::setUserInfo` and `Configuration::getUserInfo` methods for passing generic user defined data to the backend.
+- Added `LicenseID::trim`, license identifier will be automatically trimmed if you use LicenseID::from... function.
+- Fixed several minor bugs and W4 warnings, stability and performance improvements.
+
+### April 19, 2022, v7.13.0
+- Implemented new API set for managing device variables. See `DeviceVariable`, `License::getDeviceVariables`, `License::addDeviceVariable` etc.
+Now device variables a being stored along with local license, managing device variables available both locally and on the backend. See SDK documentation for more details.
+- Fixed problem of auto-revoking floating license.
+- Implemented adding consumption for offline-floating license.
+- Added `License::registerFloatingLicense` method.
+- Updated `TestFloatingServer` function for CppSample.
+- Fixed name conflict with Google Test Framework in EncryptString.h
+
+### March 31, 2022, v7.12.0
+- Improved network communication security.
+- Added SDK build for VC143 (Visual Studio 2022)
+- Added address info data to the `Customer` class (address, city, state, country, postcode).
+- Implemented ability to set desired license policy when requesting trial license. See `LicenseManager::getTrialLicense`.
+- Fixed issues with `FloatingClient::registerLicense` and `FloatingClient::isOnline`.
+
+### March 14, 2022, v7.11.0
+- Implemented Single sign-on (SSO) feature. See `LicenseManager::getSSOUrl` and `LicenseManager::activateLicense` using token.
+- Implemented `ExtendedOptions::setAlternateKey`, `ExtendedOptions::setAlternateServiceURL` methods.
+- Added SSOSample.
+- Added `FileStorageWithLock` implementation for Linux and macOS.
+- Added `License::startDate` method and `CannotBeActivatedNowException`, see SDK docs for more details.
+- Added new exceptions: `SSOException`, `SSOTokenException` and `TrialNotAllowedException`.
+- Fixed issue of incorrect license status in case license is copied from other device (in case of device id mismatch).
+
+### November 17, 2021, v7.10.0
+- Added `LicenseUser::isInitialPassword` method.
+- Fixed issue with license file path on Linux and macOS.
+- Improved performance of API requests.
+
+### November 3, 2021, v7.9.0
+- Added new class `FileStorageWithLock` for license synchronization between threads and processes.
+- Added data check when sending device variables.
+- Improved support of handling multiple licenses, added `BaseManager::reloadLicense` method.
+- Improved loading and saving local license to file, updated documentation.
+- Improved mutex management in `LicenseFileStorageEx` class.
+- Fixed bad locale name issue on some platforms.
+
+### October 04, 2021, v7.8.0
+- Added new methods `License::isAutoReleaseSet` and `License::setAutoRelease`, the same for `LicenseHandler`.
+- Added new class `LicenseUser`, see also `License::licenseUser`. Implemented getting license user info when activating or checking a license.
+- Implemented new API request `LicenseManager::getLicenseUsers`, see https://docs.licensespring.com/docs/apiv4customerlicenseusers
+- Added SDK sample for Qt Framework (https://qt.io), see samples/QtSample.
+- Added SDK sample for JUCE Framework (https://juce.com), see samples/JUCESample.
+- Fixed issue with removing local license, `clearLocalStorage` method now also removes license data from memory.
+- Fixed issue with localized dates in requests signature.
+
+### September 15, 2021, v7.7.0
+- Added new methods to `LicenseHandler` class, see `LicenseHandler::dataLocation` and `LicenseHandler::setLicenseFileName`.
+- Added new documentation for `BaseManager` class.
+- Improved LicenseStorage classes, added new class `LicenseFileStorageBase`.
+- Fixed logging issues.
+
+### September 01, 2021, v7.6.0
+- Added new classes `CryptoProvider` and `DefaultCryptoProvider`. Now it is possible to set crypto key or salt, or implement custom CryptoProvider.
+- Added new license data fields, see `License::transferCount` and `License::floatingInUseCount`.
+- Added ability to reset local consumption when updating license offline, see `License::updateOffline`.
+- Implemented new license storage model. See `LicenseStorage` abstract class and `LicenseMemoryStorage`, `LicenseFileStorage` classes.
+Now it possible to store local license in custom locations like your DB, Windows registry, etc, by implementing `LicenseStorage`.
+- Implemented interprocess synchronization for local license, see `LicenseFileStorageEx` class.
+- Implemented security improvements for offline activation (offline activation guards). See `ExtendedOptions::enableGuardFile`.
+- Improved `FloatingClient`, see changes in `FloatingClient::register/unregister` and `License::floatingClientId`.
+- Improved handling of `InstallationFile`s, added helper struct `InstallFileFilter`, updated `LicenseHandler` and C-interface.
+- Improved VM detection, fixed false positive detections.
+
+### August 02, 2021, v7.5.0
+- `LicenseManager::getTrialLicense` now returns `LicenseID`, that incudes initial password for user-based products.
+- Implemented `License::updateOffline` and `LicenseHandler::updateOffline` functions, that allow offline license updates.
+- Added new fields to `InstallationFile` class: Environment, Eula Link, Release Notes Link, Size and Channel.
+- Implemented filtering of installation files by Environment and Channel.
+- Added local consumption information to offline deactivation files.
+- Added `ClockTamperedException` instead of `DateTimeCheatingException`.
+- Fixed an issue when deleting floating license.
+
+### June 9, 2021, v7.4.0
+- Implemented new classes for interaction with on-premise floating server. See `FloatingClient`, `FloatingServerInfo`.
+- Added new members to `InstallationFile` class, that allows implementing of intermediate updates.
+See `InstallationFile::releaseDate` and `InstallationFile::requiredVersion`.
+- Security improvements, encrypted internal SDK data, added header file for strings encryption see `EncryptString.h`.
+- Added SDK build for Mac ARM64 target architecture.
+- Improved error handling.
+- Updated JSON for Modern C++ to v3.9.1
+- OpenSSL updated to v1.1.1k
+- curl updated to v7.77.0
+
+### March 17, 2021, v7.3.0
+- Implemented feature for requesting overage for Consumption licenses, see `License::syncConsumption`.
+- Added new class `NetworkInfo` and implemented feature that allows override IP, MAC and host name determined by default.
+See `ExtendedOptions::overrideNetworkInfo`.
+- Fixed false positive detection of Windows VMs.
+- Improved and optimized VM detection for Windows.
+- Fixed memory leak issue in static library due to missing OpenSSL resources clean up in curl.
+- Improved WinSample.
+- Removed `OptionalProperties` class.
+
+### February 26, 2021, v7.2.0
+- Implemented expiry date for `LicenseFeature` class, see `LicenseFeature::expiryDate` and `LicenseFeature::isExpired`.
+- Fixed COM initialization issue in VM detection module.
+- SDK build for Linux with GCC 7.5 now has no dependency to std::filesystem.
+- Fixed static linkage issue in CSample.
+- Improved WinSample.
+
+### February 15, 2021, v7.1.0
+- Added new feature for storing user data inside license file, see `License::addUserData`, `License::removeUserData` and `License::userData`
+- Added new class `OptionalProperties` for sending optional parameters when checking license.
+- Allowed decreasing consumption, see new methods `License::updateConsumption` and `License::updateFeatureConsumption`.
+- curl updated to v7.75.0
+- Created SDK build for Linux compiled with GCC 7.5
+- Added Xcode proj files for SDK samples.
+- Build for macOS now supports macOS 10.12 Sierra and latter.
+
+### January 19, 2021, v7.0.0
+- Main namespace was renamed to `LicenseSpring`.
+- Most of the classes was reworked and improved.
+- Fixed `License::daysRemaining` counter.
+- Added new class `LicenseID`, generalized API calls for user-based and key-based products.
+- Implemented C-interface, see header files inside include folder and CSample.
+- Added Documentation.
+- Removed Management API (classes `ManagementService`, `LicenseDetails`, `OrderDetails`) from the SDK,
+if you need access to Management functionality please use API directly or through the Java SDK.
+
+### November 20, 2020, v6.2.0
+- Implemented change password feature for user-based Products. See `LicenseManager::changePassword` and `License::changePassword`.
+- Added helper method `License::maintenanceDaysRemaining`.
+- Improved error handling when reading/writing license.
+- Dynamic libraries have been digitally signed.
+- Fixed minor linking issues on Linux.
+- Fixed static libraries for Windows, disabled /GL compiler switch.
+- Fixed redirection issue.
+- cUrl updated to v7.72.0
+
+### June 16, 2020, v6.1.0
+- Implemented new `LicenseHandler` class, now it became part of the LicenseSpring library.
+- Fixed LicenseWatchdog timeout issue.
+- Fixed updating of license data during online check.
+- Experimental filesystem replaced with std filesystem for Linux build.
+- A few methods of the `LicenseManager` class were renamed.
+
+### June 8, 2020, v6.0.0
+- Implemented VM Detection feature. See `License::isVMAllowed`, `LicenseSpringExtendedOptions::enableVMDetection`and `LicenseSpringConfiguration::isVM`.
+- Implemented Floating licensing and LicenseWatchdog. See `License::isFloating` and `License::setupLicenseWatchdog`.
+- Implemented Overages feature for Consumption license type. See `License::isOveragesAllowed` and `License::maxOverages`.
+- Added new classes `BaseManager` and `ManagementService`. Functionality divided into management and end-user license handling.
+- Added new exception types `VMIsNotAllowedException`, `MaxFloatingReachedException` and `DeviceBlacklistedException`.
+- Updated `LicenseDetails` and `OrderDetails` classes, added new data fields.
+- Threadsafety and reliability improvements.
+- Architecture changes and enhancements, LicenseManager no longer a singleton.
+- Fixed TLS version issue.
+- Thirdparty libs updated to latest stable versions (OpenSSL 1.0.2u, cURL 7.70+).
+
+### May 5, 2020, v5.5.2
+- Fixed hostname issue for Windows systems.
+- Fixed problem with `ProxySettings`.
+- Added new exception type `LicenseNoAvailableActivationsException`.
+
+### April 28, 2020, v5.5.1
+- Fixed consumption features update.
+- Improved error handling.
+
+### April 24, 2020, v5.5.0
+- Implemented increasing feature consumption in offline mode.
+- Improved consumption handling.
+- Added new methods `License::updateFeatureConsumption`, `LicenseFeature::localConsumption`.
+- Added helper method `License::feature`, it returns feature by code.
+- Improved error handling and added new exception class `InvalidLicenseFeatureException`.
+
+### April 10, 2020, v5.4.4
+- Improved error handling and fixed a few minor bugs.
+- Added new exceptions `MissingEmailException` and `InvalidOrderIDException`.
+
+### March 31, 2020, v5.4.3
+- Added new helper method `LicenseManager::isOnline`, for more details see header file.
+- Improved `License::increaseFeatureConsumption`, removed redundant check and increased performance.
+- For Windows default license file path changed to %localappdata%\LicenseSpring\%ProductCode%\license.key
+If you use default license path in your app license will be transferred to new location by the SDK automatically.
+- Added `UnknownLicenseSpringException` class.
+- Improved `LicenseHandler` class.
+- `License:sendCustomData` renamed to `License::sendDeviceData`.
+- Added new build for Linux that compatible with old ABI.
+
+### March 25, 2020, v5.4.1
+- Added `LicenseFeature::name`, now it's possible to get License feature name not only code.
+- Added helper method `License::isMaintenancePeriodExpired`.
+- Fixed deactivation bug, timesActivated value wasn't updated properly. Improved online deactivation, see `License::deactivate`.
+- Fixed hardware ID issue for Windows systems where system disk or other piece of hardware could not be determined.
+- Fixed linking errors for Linux build.
+
+### March 04, 2020, v5.4.0
+- Added new `LicenseManager::getTrialLicense` method.
+It accepts Customer ptr, when issuing trial license also new customer will be created or license will be assigned to existing customer.
+- Added `License::lastCheckDateUtc` and fixed `License.DaysRemaining` method, see header file for more details.
+- Added logging, see `LicenseSpringExtendedOptions::enableLogging`.
+- Improved hardware ID detection for Linux systems.
+- Fixed issue of consumption features. Consumption changes were not stored to local license file properly.
+- Fixed Unreal Engine compatibility issues, `ProxySettings` and `LicenseSpringExtendedOptions` became classes instead of structs.
+- Stability and performance improvements.
+
+### January 28, 2020, v5.3.1
+- Fixed issue with company data member in Customer class.
+- Added `OrderDetails::setOrderID` method.
+
+### January 27, 2020, v5.3.0
+- Added license owner information, see`License::owner` and console sample.
+- Fixed Hardware ID issue in case of foreign (not english) locale.
+- Fixed issue of consumption license features.
+- Added exception in case HOME system variable is unavailable.
+
+### December 24, 2019, v5.1.0
+- Added new API request `LicenseManager::getProductDetails`, new class `ProductDetails`.
+- Added `LicenseSpringConfiguration::getLicenseSpringAPIVersion` method. It returns API version that SDK uses.
+- API version field added to offline activation/deactivation.
+- `LicenseManager::getTrialKey` replaced with `LicenseManager::getTrialLicense`.
+- Improved`LicenseManager::createOrder`, new class `LicenseDetails`.
+- Improved console sample, now demonstrates both user-based and key-based licensing approaches.
+
+### December 11, 2019, v5.0.0
+- User-based licensing.
+- New classes `Customer` and`OrderDetails`.
+- Added requests for creating licenses and orders. See `LicenseManager::createLicense` and `LicenseManager::createOrder`.
+- Consumption license features. See `License::features`, `License::increaseFeatureConsumption` and `LicenseFeature` class.
+- Added new methods `License::maxActivations` and `License::timesActivated`.
+- Added ability to track MAC address.`CollectHostNameAndLocalIP` renamed to `CollectNetworkInfo`.
+- `LicenseHandler` SDK wrapper class, it helps handle SDK exceptions in one place.
+- New classes for managing app versions, see Version.h.
+- Improved samples.
+- Stability and performance improvements.
+
+### September 24, 2019, v4.6.0
+- New API request `License::sendCustomData`, it allows sending custom data to the platform. Data will be linked to a device, so on the platform see device variables.
+- Changed license status logic, now it's possible to check whether license is active even if it was disabled. See `License::isActive`, `License::isEnabled` and  `License::status`.
+
+### September 19, 2019, v4.5.3
+- Fixed online license check and hardware ID issue
+- New helper class `Version`, helps compare app versions, during update for example
+- Minor performance improvements and improved WTL sample
+
+### September 13, 2019, v4.5.2
+- Fixed `License::isOfflineActivated` method
+- Improved SDK sample apps
+
+### September 12, 2019, v4.5.1
+- Improved error handling, added new error codes eLicenseDisabled and eLicenseInactive
+- `LicenseExpiredException` has been removed. Now in case of expired license the SDK throws `LicenseStateException` with eLicenseExpired error code
+- Fixed online license check
+- Fixed offline activation in UI sample
+
+### September 09, 2019, v4.5.0
+- Added new feature - Custom product (license) data fields, see `License::customFields` and CustomField.h
+- All exceptions now have error code, see LicenseSpringErrorCodes.h
+- Added new sample with UI, it's native Windows app based on WTL (Windows Template Library)
+- Added `License::MaxDaysRemainingValue` constant
+- Fixed sending of optional parameters app name and version
+
+### August 19, 2019, v4.4.7
+- Added new API method `License::isOfflineActivated`, returns true if license was activated in offline mode
+- Added new API method `License::isActive` for convenience, equivalent to `status() == LicenseStatus::Active`
+- Fixed a few minor bugs, `License::isExpired` now returns correct value for inactive or disabled license
+
+### July 31, 2019, v4.4.6
+- Added ability to control network timeout interval
+- Added ability to set up proxy using `ProxySettings`
+
+### July 25, 2019, v4.4.5
+- Fixed expiry policy for subscription license type
+- Fixed license re-enabling issue
+- Fixed missing config.h/config.cpp for Linux and Mac samples
+- `LicenseManager::dispose` renamed to `deinitialize` 
+
+### July 08, 2019, v4.4.4
+- Fixed minor memory leak in ErrorHandler class
+- Fixed a few compiler and linker warnings
+- Stability and performance improvements
+
+### July 05, 2019, v4.4.3
+- Added static MD configuration
+- Fixed a few memory leaks
+- Stability and performance improvements
+
+### June 20, 2019, v4.4.2
+- Fixed access violation crash when using SDK as a plugin for Unreal Engine
+- Fixed Hardware ID issue, now it's accessible for reading
+- Build for VC142 (Visual Studio 2019)
+- Stability and performance improvements
+
+### June 12, 2019, v4.4.1
+- New API method `LicenseManager::dispose`, it helps free up SDK resources on demand
+- Stability and performance improvements
+
+### June 11, 2019, v4.4.0
+- Offline licensing. New API methods - `getOfflineActivationFile`, `activateLicenseOffline` and `deActivateOffline`
+- Signature verification, security improvements
+- Detecting system clock cheating, new exception `DateTimeCheatingException`
+- New helper methods - `daysPassedSinceLastCheck`, `LicenseManager::isInitialized`
+- Build for Mac OS X
+- Stability and performance improvements
+
+### May 10, 2019, v4.3.0
+- New Hardware ID calculation algorithm, much more faster and secure
+- Consumption licensing, new methods `increaseConsumptionCounter`, `totalConsumptions`, `maxConsumptions` and new exception type `NotEnoughConsumptionException`. See sample app for details.
+- Fixed bug of handling license check response
+
+### April 23, 2019, v4.2.1
+- Ability to set custom hardware ID
+- `LicenseSpringExtendedOptions`, all optional SDK configuration properties now brought together in ExtendedOptions class, see LicenseSpringConfiguration.h for details
+- `lib` and `dll` folders changed to `static` and `dynamic` accordingly
+- Improved networking and error handling
+
+### April 12, 2019, v4.2.0
+- License status, `isActive` now replaced with `status` for the License class, for more details see **LicenseStatus.h**
+- Implemented getting of local IP address
+- New and faster method of getting OS version info
+- Improvements for `LicenseType` class, new comparison operators and constructor
+
+### April 8, 2019, v4.1.2
+- Separate release for VC140 (Visual Studio 2015)
+- Fixed handling of max date time (applicable to validity period of perpetual license or not set maintenance period)
+- Fixed project files for the SDK and sample apps
+- SDK dependencies (OpenSSL and cURL) updated to latest stable versions
+- Added script for building dependencies from sources
